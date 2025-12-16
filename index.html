@@ -6,7 +6,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    
     .fade-in {
       animation: fadeIn 0.8s ease-out forwards;
     }
@@ -22,7 +21,6 @@
       }
     }
 
-    
     .pulse {
       animation: pulse 1.2s infinite;
     }
@@ -39,7 +37,7 @@
 
   <div class="w-full max-w-xl bg-white/5 backdrop-blur-xl rounded-2xl p-8 shadow-2xl border border-white/10 fade-in">
 
-    
+    <!-- Header -->
     <h1 class="text-3xl font-bold tracking-tight text-center">
       Resume Roaster
     </h1>
@@ -47,13 +45,14 @@
       Honest. Brutal. Helpful.
     </p>
 
-    
+    <!-- Upload -->
     <div class="mt-8">
       <label class="block text-sm mb-2 text-gray-300">
         Upload your resume (PDF)
       </label>
 
       <div
+        id="uploadBox"
         class="relative border border-dashed border-white/20 rounded-xl p-4 hover:border-red-500 transition"
       >
         <input
@@ -66,9 +65,15 @@
           Click to upload or drag & drop
         </p>
       </div>
+
+      <!-- File Selected Indicator -->
+      <p
+        id="fileStatus"
+        class="mt-2 text-sm text-green-400 hidden"
+      ></p>
     </div>
 
-    
+    <!-- Button -->
     <button
       id="roastBtn"
       class="w-full mt-6 py-3 rounded-xl bg-red-600 hover:bg-red-700 active:scale-95 transition font-semibold"
@@ -84,7 +89,7 @@
       Analyzing… finding weak points 👀
     </p>
 
-    
+    <!-- Result -->
     <div
       id="result"
       class="hidden mt-6 border border-red-500/30 bg-black/40 rounded-xl p-5 fade-in"
@@ -106,6 +111,8 @@
     const loading = document.getElementById("loading");
     const result = document.getElementById("result");
     const roastText = document.getElementById("roastText");
+    const fileStatus = document.getElementById("fileStatus");
+    const uploadBox = document.getElementById("uploadBox");
 
     function typeText(text, element, speed = 20) {
       element.textContent = "";
@@ -118,10 +125,33 @@
       }, speed);
     }
 
+    // 🔹 File selection (NO backend call)
+    resumeInput.addEventListener("change", () => {
+      const file = resumeInput.files[0];
+
+      if (!file) return;
+
+      if (file.type !== "application/pdf") {
+        alert("Please upload a PDF only.");
+        resumeInput.value = "";
+        fileStatus.classList.add("hidden");
+        uploadBox.classList.remove("border-green-500");
+        return;
+      }
+
+      fileStatus.textContent = `✔ ${file.name} selected (${(file.size / 1024).toFixed(1)} KB)`;
+      fileStatus.classList.remove("hidden");
+
+      uploadBox.classList.remove("border-white/20");
+      uploadBox.classList.add("border-green-500");
+    });
+
+    // 🔥 Roast button → backend call
     roastBtn.addEventListener("click", async () => {
       const file = resumeInput.files[0];
+
       if (!file) {
-        alert("Upload a PDF first.");
+        alert("Please select a resume first.");
         return;
       }
 
@@ -143,8 +173,8 @@
 
         result.classList.remove("hidden");
         typeText(data.roast, roastText);
-      } catch (e) {
-        alert("Backend error. Check logs.");
+      } catch (err) {
+        alert("Backend error. Check server logs.");
       } finally {
         loading.classList.add("hidden");
         roastBtn.classList.remove("pulse");
@@ -155,4 +185,3 @@
 
 </body>
 </html>
-
