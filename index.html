@@ -6,7 +6,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    /* subtle fade + slide */
+    
     .fade-in {
       animation: fadeIn 0.8s ease-out forwards;
     }
@@ -22,7 +22,7 @@
       }
     }
 
-    /* button pulse while loading */
+    
     .pulse {
       animation: pulse 1.2s infinite;
     }
@@ -39,7 +39,7 @@
 
   <div class="w-full max-w-xl bg-white/5 backdrop-blur-xl rounded-2xl p-8 shadow-2xl border border-white/10 fade-in">
 
-    <!-- Header -->
+    
     <h1 class="text-3xl font-bold tracking-tight text-center">
       Resume Roaster
     </h1>
@@ -47,7 +47,7 @@
       Honest. Brutal. Helpful.
     </p>
 
-    <!-- Upload -->
+    
     <div class="mt-8">
       <label class="block text-sm mb-2 text-gray-300">
         Upload your resume (PDF)
@@ -68,7 +68,7 @@
       </div>
     </div>
 
-    <!-- Button -->
+    
     <button
       id="roastBtn"
       class="w-full mt-6 py-3 rounded-xl bg-red-600 hover:bg-red-700 active:scale-95 transition font-semibold"
@@ -84,7 +84,7 @@
       Analyzing… finding weak points 👀
     </p>
 
-    <!-- Result -->
+    
     <div
       id="result"
       class="hidden mt-6 border border-red-500/30 bg-black/40 rounded-xl p-5 fade-in"
@@ -134,7 +134,7 @@
       result.classList.add("hidden");
 
       try {
-        const res = await fetch("http://localhost:8000/upload", {
+        const res = await fetch("https://resume-roaster-server.onrender.com/upload", {
           method: "POST",
           body: formData,
         });
@@ -155,3 +155,4 @@
 
 </body>
 </html>
+
